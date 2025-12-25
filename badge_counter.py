@@ -12,17 +12,54 @@ from webdriver_manager.chrome import ChromeDriverManager
 
 
 def setup_driver():
-    """Sets up a headless Chrome browser instance."""
+    """Sets up a headless Chrome browser instance with deployment-friendly configuration."""
     options = webdriver.ChromeOptions()
+    
+    # Essential headless options
     options.add_argument("--headless")
     options.add_argument("--disable-gpu")
     options.add_argument("--window-size=1920,1200")
     options.add_argument("--ignore-certificate-errors")
     options.add_argument("--disable-extensions")
+    
+    # Critical for deployment environments (Docker, Render, Railway, etc.)
     options.add_argument("--no-sandbox")
     options.add_argument("--disable-dev-shm-usage")
-    service = Service(ChromeDriverManager().install())
-    return webdriver.Chrome(service=service, options=options)
+    options.add_argument("--disable-blink-features=AutomationControlled")
+    options.add_argument("--single-process")
+    options.add_argument("--disable-setuid-sandbox")
+    
+    # Prevent potential memory issues
+    options.add_argument("--disable-software-rasterizer")
+    
+    try:
+        # Try to install ChromeDriver using webdriver-manager
+        driver_path = ChromeDriverManager().install()
+        if driver_path is None:
+            raise ValueError("ChromeDriverManager returned None - driver installation failed")
+        
+        service = Service(driver_path)
+        driver = webdriver.Chrome(service=service, options=options)
+        print("✅ Chrome driver initialized successfully")
+        return driver
+        
+    except Exception as e:
+        print(f"❌ Error setting up Chrome driver: {str(e)}")
+        print("Attempting to use Chrome without explicit driver path...")
+        
+        # Fallback: Try to use Chrome without explicit service
+        # This works if chromedriver is already in PATH (common in deployment environments)
+        try:
+            driver = webdriver.Chrome(options=options)
+            print("✅ Chrome driver initialized using system PATH")
+            return driver
+        except Exception as fallback_error:
+            print(f"❌ Fallback also failed: {str(fallback_error)}")
+            raise RuntimeError(
+                f"Failed to initialize Chrome driver. Original error: {str(e)}. "
+                f"Fallback error: {str(fallback_error)}. "
+                "Please ensure Chrome/Chromium is installed in the deployment environment."
+            )
 
 
 def get_badge_count(driver, profile_url: str):
