@@ -13,7 +13,14 @@ from webdriver_manager.chrome import ChromeDriverManager
 
 def setup_driver():
     """Sets up a headless Chrome browser instance with deployment-friendly configuration."""
+    import os
     options = webdriver.ChromeOptions()
+    
+    # Set binary location for Chromium in production (Render uses /usr/bin/chromium)
+    # Check if running in production by looking for Render environment variable
+    if os.path.exists("/usr/bin/chromium"):
+        options.binary_location = "/usr/bin/chromium"
+        print("🔧 Using Chromium binary at /usr/bin/chromium")
     
     # Essential headless options
     options.add_argument("--headless")
