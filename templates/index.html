@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>GCP Badge Counter - Count Your Achievements</title>
+    <meta name="description" content="Count your Google Cloud Skills Boost badges instantly from your public profile URL">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <div class="badge-icon">
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <path d="M12 2L15 9L22 10L17 15L18 22L12 18L6 22L7 15L2 10L9 9L12 2Z"/>
+                </svg>
+            </div>
+            <h1>GCP Badge Counter</h1>
+            <p class="subtitle">Count your Google Cloud Skills Boost achievements instantly</p>
+        </div>
+
+        <div class="card">
+            <form id="badgeForm">
+                <div class="form-group">
+                    <label for="profileUrl">
+                        <svg class="icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"/>
+                            <path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"/>
+                        </svg>
+                        Public Profile URL
+                    </label>
+                    <input 
+                        type="url" 
+                        id="profileUrl" 
+                        name="profileUrl" 
+                        placeholder="https://www.cloudskillsboost.google/public_profiles/..."
+                        required
+                    >
+                    <div class="input-hint">Enter your Google Cloud Skills Boost public profile URL</div>
+                </div>
+
+                <button type="submit" class="btn-primary" id="submitBtn">
+                    <span class="btn-text">Count Badges</span>
+                    <div class="spinner" id="spinner"></div>
+                </button>
+            </form>
+
+            <div id="resultContainer" class="result-container hidden">
+                <div class="result-card">
+                    <div class="result-icon">
+                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <path d="M12 2L15 9L22 10L17 15L18 22L12 18L6 22L7 15L2 10L9 9L12 2Z"/>
+                        </svg>
+                    </div>
+                    <div class="result-content">
+                        <h2>Badge Count</h2>
+                        <div class="badge-count" id="badgeCount">0</div>
+                        <p class="result-message">Awesome achievements! 🎉</p>
+                    </div>
+                </div>
+            </div>
+
+            <div id="errorContainer" class="error-container hidden">
+                <div class="error-card">
+                    <svg class="error-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <circle cx="12" cy="12" r="10"/>
+                        <line x1="12" y1="8" x2="12" y2="12"/>
+                        <line x1="12" y1="16" x2="12.01" y2="16"/>
+                    </svg>
+                    <p id="errorMessage"></p>
+                </div>
+            </div>
+        </div>
+
+        <div class="info-section">
+            <h3>How to use:</h3>
+            <ol>
+                <li>Go to your <a href="https://www.cloudskillsboost.google/" target="_blank" rel="noopener">Google Cloud Skills Boost</a> profile</li>
+                <li>Make sure your profile is set to <strong>public</strong></li>
+                <li>Copy your public profile URL</li>
+                <li>Paste it above and click "Count Badges"</li>
+            </ol>
+        </div>
+
+        <footer>
+            <p>Made with ❤️ for cloud learners | Powered by Selenium & Flask</p>
+        </footer>
+    </div>
+
+    <script src="{{ url_for('static', filename='script.js') }}"></script>
+</body>
+</html>

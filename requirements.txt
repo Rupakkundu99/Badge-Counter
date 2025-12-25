@@ -1,0 +1,10 @@
+# Badge Counter Web Application - For web deployment only
+Flask==3.0.0
+selenium==4.15.2
+webdriver-manager==4.0.1
+gunicorn==21.2.0
+
+# Note: For Google Sheets batch processing (updateBadges.py), also install:
+# gspread
+# google-auth
+# pandas
